@@ -18,8 +18,8 @@
     <PackageReleaseNotes>https://github.com/nilsauf/FluentComparer/releases</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/nilsauf/FluentComparer</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-        
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+	<!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
     <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl> 
     <!-- Embed source files that are not tracked by the source control manager in the PDB -->
