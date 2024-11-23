@@ -18,17 +18,16 @@ jobs:
       nbgv: ${{ steps.nbgv.outputs.SemVer2 }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Install .NET Core
-      uses: actions/setup-dotnet@v3.1.0
+      uses: actions/setup-dotnet@v4.1.0
       with:
         dotnet-version: | 
-          3.1.x
-          6.0.x
-          7.0.x
+          8.0.x
+          9.0.x
 
     - name: NBGV
       id: nbgv
@@ -77,12 +76,12 @@ jobs:
     if: github.ref_name == 'main' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
 
     - name: Download NuGet Packages
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: nuget    
 
