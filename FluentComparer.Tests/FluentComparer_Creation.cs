@@ -1,39 +1,48 @@
-namespace FluentComparer.Tests
+namespace FluentComparer.Tests;
+
+using System;
+using System.Collections.Generic;
+using Xunit;
+
+public class FluentComparer_Creation()
 {
-	using System;
-	using Xunit;
+    [Fact]
+    public void FluentComparer_Creation_WithValidProperty_ReturnsComparer()
+    {
+        var comparer = FluentComparer<TestClass>.For(testClass => testClass.First);
 
-	public class FluentComparer_Creation
-	{
-		[Fact]
-		public void FluentComparer_Creation_OK()
-		{
-			var firstComparer = FluentComparer<TestClass>.For(tc => tc.First);
+        Assert.NotNull(comparer);
+    }
 
-			Assert.NotNull(firstComparer);
-		}
+    [Fact]
+    public void FluentComparer_Creation_WithNullProperty_ThrowsArgumentNullException()
+    {
+        Func<TestClass, ComparableClass> getProperty = null;
 
-		[Fact]
-		public void FluentComparer_Creation_Null()
-		{
-			Func<TestClass, ComparableClass> getProperty = null;
-			Assert.Throws<ArgumentNullException>(() => FluentComparer<TestClass>.For(getProperty));
-		}
+        Assert.Throws<ArgumentNullException>(() => FluentComparer<TestClass>.For(getProperty));
+    }
 
-		[Fact]
-		public void FluentComparer_Creation_NullOnDeeperLevel()
-		{
-			Func<TestClass, ComparableClass> getProperty = null;
-			Assert.Throws<ArgumentNullException>(
-				() => FluentComparer<TestClass>
-					.For(tc => tc.First)
-					.For(getProperty));
+    [Fact]
+    public void FluentComparer_Creation_WithNullPropertyOnSecondLevel_ThrowsArgumentNullException()
+    {
+        Func<TestClass, ComparableClass> getProperty = null;
 
-			Assert.Throws<ArgumentNullException>(
-				() => FluentComparer<TestClass>
-					.For(tc => tc.First)
-					.For(tc => tc.Second)
-					.For(getProperty));
-		}
-	}
+        Assert.Throws<ArgumentNullException>(
+            () => CreateFirstLevelComparer().For(getProperty));
+    }
+
+    [Fact]
+    public void FluentComparer_Creation_WithNullPropertyOnThirdLevel_ThrowsArgumentNullException()
+    {
+        Func<TestClass, ComparableClass> getProperty = null;
+
+        Assert.Throws<ArgumentNullException>(
+            () => CreateSecondLevelComparer().For(getProperty));
+    }
+
+    private static IComparer<TestClass> CreateFirstLevelComparer()
+        => FluentComparer<TestClass>.For(testClass => testClass.First);
+
+    private static IComparer<TestClass> CreateSecondLevelComparer()
+        => CreateFirstLevelComparer().For(testClass => testClass.Second);
 }

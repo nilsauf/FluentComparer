@@ -1,97 +1,88 @@
-﻿namespace FluentComparer.Tests
+﻿namespace FluentComparer.Tests;
+
+using System.Collections.Generic;
+using Xunit;
+
+public class FluentComparer_ComparingToNull()
 {
-	using Xunit;
+    [Fact]
+    public void FluentComparer_ComparingToNull_WhenFirstObjectIsNull_ReturnsNegativeOne()
+    {
+        var comparer = CreateComparer();
+        TestClass left = null;
+        var right = new TestClass(1, 2);
 
-	public class FluentComparer_ComparingToNull
-	{
-		[Fact]
-		public void FluentComparer_ComparingToNull_FirstTestClassNull()
-		{
-			var firstComparer = FluentComparer<TestClass>.For(tc => tc.First);
+        var result = comparer.Compare(left, right);
 
-			TestClass test1 = null;
-			var test2 = new TestClass(1, 2);
+        Assert.Equal(-1, result);
+    }
 
-			var result = firstComparer.Compare(test1, test2);
+    [Fact]
+    public void FluentComparer_ComparingToNull_WhenSecondObjectIsNull_ReturnsOne()
+    {
+        var comparer = CreateComparer();
+        var left = new TestClass(1, 2);
+        TestClass right = null;
 
-			Assert.True(result < 0);
-		}
+        var result = comparer.Compare(left, right);
 
-		[Fact]
-		public void FluentComparer_ComparingToNull_SecondTestClassNull()
-		{
-			var firstComparer = FluentComparer<TestClass>.For(tc => tc.First);
+        Assert.Equal(1, result);
+    }
 
-			var test1 = new TestClass(1, 2);
-			TestClass test2 = null;
+    [Fact]
+    public void FluentComparer_ComparingToNull_WhenBothObjectsAreNull_ReturnsZero()
+    {
+        var comparer = CreateComparer();
+        TestClass left = null;
+        TestClass right = null;
 
-			var result = firstComparer.Compare(test1, test2);
+        var result = comparer.Compare(left, right);
 
-			Assert.True(result > 0);
-		}
+        Assert.Equal(0, result);
+    }
 
-		[Fact]
-		public void FluentComparer_ComparingToNull_BothTestClassesNull()
-		{
-			var firstComparer = FluentComparer<TestClass>.For(tc => tc.First);
+    [Fact]
+    public void FluentComparer_ComparingToNull_WhenFirstPropertyIsNull_ReturnsNegativeOne()
+    {
+        var comparer = CreateComparer();
+        var left = CreateTestClassWithNullFirst(propToCompare2: 2);
+        var right = new TestClass(1, 2);
 
-			TestClass test1 = null;
-			TestClass test2 = null;
+        var result = comparer.Compare(left, right);
 
-			var result = firstComparer.Compare(test1, test2);
+        Assert.Equal(-1, result);
+    }
 
-			Assert.True(result == 0);
-		}
+    [Fact]
+    public void FluentComparer_ComparingToNull_WhenSecondPropertyIsNull_ReturnsOne()
+    {
+        var comparer = CreateComparer();
+        var left = new TestClass(1, 2);
+        var right = CreateTestClassWithNullFirst(propToCompare2: 2);
 
-		[Fact]
-		public void FluentComparer_ComparingToNull_FirstPropertyNull()
-		{
-			var firstComparer = FluentComparer<TestClass>.For(tc => tc.First);
+        var result = comparer.Compare(left, right);
 
-			var test1 = new TestClass(propToCompare2: 2)
-			{
-				First = null
-			};
-			var test2 = new TestClass(1, 2);
+        Assert.Equal(1, result);
+    }
 
-			var result = firstComparer.Compare(test1, test2);
+    [Fact]
+    public void FluentComparer_ComparingToNull_WhenBothPropertiesAreNull_ReturnsZero()
+    {
+        var comparer = CreateComparer();
+        var left = CreateTestClassWithNullFirst(propToCompare2: 2);
+        var right = CreateTestClassWithNullFirst(propToCompare2: 3);
 
-			Assert.True(result < 0);
-		}
+        var result = comparer.Compare(left, right);
 
-		[Fact]
-		public void FluentComparer_ComparingToNull_SecondPropertyNull()
-		{
-			var firstComparer = FluentComparer<TestClass>.For(tc => tc.First);
+        Assert.Equal(0, result);
+    }
 
-			var test1 = new TestClass(1, 2);
-			var test2 = new TestClass(propToCompare2: 2)
-			{
-				First = null
-			};
+    private static IComparer<TestClass> CreateComparer()
+        => FluentComparer<TestClass>.For(testClass => testClass.First);
 
-			var result = firstComparer.Compare(test1, test2);
-
-			Assert.True(result > 0);
-		}
-
-		[Fact]
-		public void FluentComparer_ComparingToNull_BothPropertiesNull()
-		{
-			var firstComparer = FluentComparer<TestClass>.For(tc => tc.First);
-
-			var test1 = new TestClass(propToCompare2: 2)
-			{
-				First = null
-			};
-			var test2 = new TestClass(propToCompare2: 3)
-			{
-				First = null
-			};
-
-			var result = firstComparer.Compare(test1, test2);
-
-			Assert.True(result == 0);
-		}
-	}
+    private static TestClass CreateTestClassWithNullFirst(int propToCompare2)
+        => new(propToCompare2: propToCompare2)
+        {
+            First = null
+        };
 }

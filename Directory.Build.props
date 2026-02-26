@@ -6,10 +6,11 @@
     <IsTestProject>$(MSBuildProjectName.Contains('.Test'))</IsTestProject>
     <DebugType>embedded</DebugType>        
     <GenerateDocumentationFile Condition="!$(IsTestProject)">true</GenerateDocumentationFile>
+    <LangVersion>latest</LangVersion>
     
     <Authors>Nils Aufschläger</Authors>
     <Owners>Nils Aufschläger</Owners>
-    <Copyright>Copyright (c) Nils Aufschläger 2023</Copyright>
+    <Copyright>Copyright (c) Nils Aufschläger 2026</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/nilsauf/FluentComparer</PackageProjectUrl>
     <PackageIconUrl></PackageIconUrl>

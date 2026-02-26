@@ -1,29 +1,17 @@
-﻿namespace FluentComparer.Tests
+﻿namespace FluentComparer.Tests;
+
+using System;
+
+internal class TestClass(int propToCompare1 = 0, int propToCompare2 = 0)
 {
-	using System;
+    public ComparableClass First { get; set; } = new(propToCompare1);
+    public ComparableClass Second { get; set; } = new(propToCompare2);
+}
 
-	internal class TestClass
-	{
-		public ComparableClass First { get; set; }
-		public ComparableClass Second { get; set; }
+internal class ComparableClass(int propToCompare = 0) : IComparable<ComparableClass>
+{
+    public int PropToCompare { get; set; } = propToCompare;
 
-		public TestClass(int propToCompare1 = 0, int propToCompare2 = 0)
-		{
-			this.First = new ComparableClass(propToCompare1);
-			this.Second = new ComparableClass(propToCompare2);
-		}
-	}
-
-	internal class ComparableClass : IComparable<ComparableClass>
-	{
-		public int PropToCompare { get; set; }
-
-		public ComparableClass(int propToCompare = 0)
-		{
-			this.PropToCompare = propToCompare;
-		}
-
-		public int CompareTo(ComparableClass other)
-			=> this.PropToCompare.CompareTo(other.PropToCompare);
-	}
+    public int CompareTo(ComparableClass other)
+        => this.PropToCompare.CompareTo(other.PropToCompare);
 }
